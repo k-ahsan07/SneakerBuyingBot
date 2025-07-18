@@ -204,6 +204,14 @@ if (require.main === module) {
       await page.type('#email', 'khuziahsan07@gmail.com', { delay: 50 });
       await fillShippingForm(page);
       await fillPaymentForm(page);
+      // Click the Pay now button
+      console.log('Waiting for Pay now button...');
+      await page.waitForSelector('#checkout-pay-button');
+      await page.evaluate(() => {
+        const btn = document.querySelector('#checkout-pay-button');
+        if (btn) btn.click();
+      });
+      console.log('Clicked Pay now button.');
     } catch (err) {
       exitCode = 1;
       console.error('Error:', err.message);
