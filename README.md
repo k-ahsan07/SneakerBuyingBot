@@ -39,3 +39,5 @@ Start the server
   node bot.js
 ```
 
+
+https://github.com/user-attachments/assets/02578e17-3aba-4543-b7aa-2e15bc10b6b8
