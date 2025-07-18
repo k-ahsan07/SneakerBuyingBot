@@ -101,13 +101,13 @@ async function fillShippingForm(page) {
   const firstNameSelector = 'input[name="firstName"]';
   await page.click(firstNameSelector, { clickCount: 3 });
   await page.keyboard.press('Backspace');
-  await page.type(firstNameSelector, 'Bruno', { delay: 50 });
+  await page.type(firstNameSelector, 'Kelvin', { delay: 50 });
 
   // Last name
   const lastNameSelector = 'input[name="lastName"]';
   await page.click(lastNameSelector, { clickCount: 3 });
   await page.keyboard.press('Backspace');
-  await page.type(lastNameSelector, 'Pakistan', { delay: 50 });
+  await page.type(lastNameSelector, 'Phillips', { delay: 50 });
 
   // Address
   const addressSelector = 'input[name="address1"]';
@@ -145,6 +145,49 @@ async function fillShippingForm(page) {
   console.log('Shipping form filled.');
 }
 
+/**
+ * Fill the payment form (card number, expiry, cvv) in their respective iframes.
+ * @param {import('puppeteer').Page} page
+ */
+async function fillPaymentForm(page) {
+  console.log('Filling payment form...');
+  // Wait for all card iframes to appear
+  await page.waitForSelector('iframe.card-fields-iframe');
+  const frames = page.frames();
+
+  // Card number
+  const cardNumberFrame = frames.find(f => f.url().includes('number-ltr.html'));
+  if (cardNumberFrame) {
+    await cardNumberFrame.waitForSelector('input[name="number"]');
+    await cardNumberFrame.type('input[name="number"]', '4924 9856 3142 9971', { delay: 50 });
+    console.log('Card number entered');
+  } else {
+    console.log('Card number iframe not found');
+  }
+
+  // Expiry
+  const expiryFrame = frames.find(f => f.url().includes('expiry-ltr.html'));
+  if (expiryFrame) {
+    await expiryFrame.waitForSelector('input[name="expiry"]');
+    await expiryFrame.type('input[name="expiry"]', '10/29', { delay: 50 });
+    console.log('Expiry entered');
+  } else {
+    console.log('Expiry iframe not found');
+  }
+
+  // CVV
+  const cvvFrame = frames.find(f => f.url().includes('verification_value-ltr.html'));
+  if (cvvFrame) {
+    await cvvFrame.waitForSelector('input[name="verification_value"]');
+    await cvvFrame.type('input[name="verification_value"]', '159', { delay: 50 });
+    console.log('CVV entered');
+  } else {
+    console.log('CVV iframe not found');
+  }
+
+  console.log('Payment form filled.');
+}
+
 if (require.main === module) {
   (async () => {
     let exitCode = 0;
@@ -160,6 +203,7 @@ if (require.main === module) {
       await page.waitForSelector('#email');
       await page.type('#email', 'khuziahsan07@gmail.com', { delay: 50 });
       await fillShippingForm(page);
+      await fillPaymentForm(page);
     } catch (err) {
       exitCode = 1;
       console.error('Error:', err.message);
