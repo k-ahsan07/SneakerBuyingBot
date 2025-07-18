@@ -1,5 +1,9 @@
 
-# -SneakerBuyingBot
+# - 
+
+https://github.com/user-attachments/assets/02578e17-3aba-4543-b7aa-2e15bc10b6b8
+
+SneakerBuyingBot
 
 Description
 A Node.js automation bot that helps users purchase limited-edition sneakers by automatically adding products to cart and proceeding with checkout.
